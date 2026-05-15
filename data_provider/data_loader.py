@@ -229,6 +229,8 @@ def load_mnist_data(trainingset_size):
 
     features = data.data.view(-1, 28*28).float() / 255.0 # Normalize pixel values to [0, 1]
     labels = data.targets
+    f = features.shape[1]
+    c = 10 # digits 0-9
 
     # We need to extract 1000 random samples from each of the 10 classes (digits 0-9) to create a training set of 10,000 samples
     all_idx = []
@@ -238,22 +240,38 @@ def load_mnist_data(trainingset_size):
         all_idx.append(subset_idx)
     
     all_idx = torch.cat(all_idx)
+    all_idx = all_idx[torch.randperm(len(all_idx))]
 
+    features = features[all_idx]
+    labels = labels[all_idx]
     
-    print(all_idx)
-    # # Create train, val and test splits (predefined in the Franceschi paper)
-    # from sklearn.model_selection import train_test_split
+    # Create train, val and test splits 
+    from sklearn.model_selection import train_test_split
 
-    # train_mask, val_mask, test_mask = mask_sklearn_data(features, labels, train_size=labels_size, val_size=1000, seed=42)
+    train_idx, temp_idx = train_test_split(
+        np.arange(features.shape[0]),
+        train_size=trainingset_size,
+        random_state=42,
+        stratify=labels.numpy()
+    )
 
-    # features = torch.FloatTensor(features)
-    # labels = torch.LongTensor(labels)
-    # train_mask = torch.BoolTensor(train_mask)
-    # val_mask = torch.BoolTensor(val_mask)
-    # test_mask = torch.BoolTensor(test_mask)
+    val_idx, test_idx = train_test_split(
+        temp_idx,
+        train_size=1000,
+        random_state=42,
+        stratify=labels[temp_idx].numpy()
+    )
+
+    train_mask = mask(train_idx, labels.shape[0])
+    val_mask = mask(val_idx, labels.shape[0])
+    test_mask = mask(test_idx, labels.shape[0])
+
+    features = torch.FloatTensor(features)
+    labels = torch.LongTensor(labels)
+    train_mask = torch.BoolTensor(train_mask)
+    val_mask = torch.BoolTensor(val_mask)
+    test_mask = torch.BoolTensor(test_mask)
     
-    # return features, labels, train_mask, val_mask, test_mask, f, c
+    return features, labels, train_mask, val_mask, test_mask, f, c
 
-
-
-load_mnist_data(1000)
+# load_mnist_data(3000)
