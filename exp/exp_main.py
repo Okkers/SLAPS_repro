@@ -1,5 +1,6 @@
 from data_provider.data_factory import data_provider
 from exp.exp_basic import Exp_Basic 
+from models import SLAPS
 
 import numpy as np 
 import torch 
@@ -19,12 +20,12 @@ class Exp_Main(Exp_Basic):
 
     def _build_model(self):
         model_dict = {
-            # TO BE FILLED
+            "SLAPS": SLAPS
         }
         model = model_dict[self.args.model].Model(self.args).float()
 
-        if self.args.use_multi_gpu and self.args.use_gpu:
-            model = nn.DataParallel(model, device_ids = self.args.device_ids)
+        # if self.args.use_multi_gpu and self.args.use_gpu:
+            # model = nn.DataParallel(model, device_ids = self.args.device_ids)
         return model 
     
     def _get_data(self, flag):
@@ -72,3 +73,14 @@ class Exp_Main(Exp_Basic):
         ### IMPLEMENT BATCH PREDICTION
 
         return 
+    
+    def bugfix(self):
+        ### BUGFIXING NOISE FUNCTION FOR NOW 
+        test_x = torch.ones((5,5))
+
+        print(test_x)
+        tilde_x, mask = self.model.add_noise(test_x)
+
+        print(tilde_x)
+        print(mask)
+        return

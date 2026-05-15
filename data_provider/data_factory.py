@@ -1,5 +1,5 @@
 ### THIS IS BOILER PLATE FOR DATA LOADING AND CREATION
-from data_loader import load_citation_data, load_ogbn_arxiv_data, load_sklearn_data, load_mnist_data
+from data_provider.data_loader import load_citation_data, load_ogbn_arxiv_data, load_sklearn_data, load_mnist_data
 
 data_dict = {
 

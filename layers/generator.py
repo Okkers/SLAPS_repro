@@ -19,24 +19,26 @@ class FullParametrization(nn.Module):
         return self.A
     
 class MLP(nn.Module):
-    def __init__(self, layers_size, input_dim, k):
+    def __init__(self, configs):
+    # def __init__(self, layers_size, input_dim, k):
         super(MLP, self).__init__()
 
+
         # Note that the paper mentions that "we keep the input dimension the same throughout the layers."
-        self.input_dim = input_dim
-        self.output_dim = input_dim # the paper mentions that "for both variants, we initialize the weight matrices with identity"
+        self.input_dim = configs.gen_input_dim
+        self.output_dim = configs.gen_input_dim # the paper mentions that "for both variants, we initialize the weight matrices with identity"
                                         # so the output dimension is probably the same as the input dimension.
-        self.k = k
+        self.k = configs.gen_k
         
         self.mlp = []
 
-        if layers_size == 1:
-            self.mlp.append(nn.Linear(input_dim, input_dim))
+        if configs.gen_layers_size == 1:
+            self.mlp.append(nn.Linear(configs.gen_input_dim, configs.gen_input_dim))
         else:
-            for _ in range(layers_size - 1):
-                self.mlp.append(nn.Linear(input_dim, input_dim))
+            for _ in range(configs.gen_layers_size - 1):
+                self.mlp.append(nn.Linear(configs.gen_input_dim, configs.gen_input_dim))
                 self.mlp.append(nn.ReLU())
-            self.mlp.append(nn.Linear(input_dim, input_dim))
+            self.mlp.append(nn.Linear(configs.gen_input_dim, configs.gen_input_dim))
 
         self.mlp = nn.Sequential(*self.mlp)
 
