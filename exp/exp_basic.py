@@ -1,7 +1,7 @@
 import os 
 import torch
 
-class Exp_basic(object):
+class Exp_Basic(object):
     def __init__(self, args):
         self.args = args
         self.device = self._acquire_device()

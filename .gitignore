@@ -1,0 +1,5 @@
+venv/
+.venv/
+slaps_venv/
+
+data

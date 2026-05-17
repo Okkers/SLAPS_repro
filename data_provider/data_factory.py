@@ -1,42 +1,24 @@
 ### THIS IS BOILER PLATE FOR DATA LOADING AND CREATION
-from torch.utils.data import DataLoader
-from data_provider.data_loader import Dataset_A
+from data_provider.data_loader import load_citation_data, load_ogbn_arxiv_data, load_sklearn_data, load_mnist_data
 
 data_dict = {
 
 }
 
-def data_provider(args, flag):
-    Data = data_dict[args.data]
-    
-    if flag == "test":
-        ### FLAGS FOR TESTING
-
-        ### e.g. batch_size = args.batch_size
-        ### e.g. shuffle_data = False
-
-        pass
-        
-    elif flag == "pred":
-        ### FLAGS FOR PREDICTING
-
-        ### e.g. batch_size = 1
-        ### e.g. shuffle_falg = True
-        pass
-
+def data_provider(args):
+    """Returns the data for the specified dataset name.
+    Args:
+        args: An object containing the dataset name and other relevant parameters.
+    Returns:
+        The data for the specified dataset name, which include features, labels, train_mask, val_mask, test_mask, graph, f, c.
+    """
+    if args.dataset in ['cora', 'citeseer', 'pubmed']:
+        return load_citation_data(args.dataset) 
+    elif args.dataset == "ogbn-arxiv":
+        return load_ogbn_arxiv_data() 
+    elif args.dataset == "mnist":
+        return load_mnist_data(args.trainingset_size)
+    elif args.dataset in ["wine", "cancer", "digits", "20news"]:
+        return load_sklearn_data(args.dataset) 
     else:
-        ### FLAGS FOR TRAINING
-        pass
-
-
-    # data_set = Data(
-    #  root_path = args.root_path,
-    #  size = [args.seq_len]
-    #)
-    #
-
-    # data_loader = DataLoader(
-    # data_set,   
-    # batch_size = batch_size   
-    #    )
-    return # data_set, data_loader
+        raise ValueError(f"Dataset {args.dataset} not recognized.")
