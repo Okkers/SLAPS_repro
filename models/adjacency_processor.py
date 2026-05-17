@@ -7,25 +7,24 @@ class AdjacencyProcessor:
     Depending on generator type we apply different function P, either relu or elu.
     """
 
-    def __init__(self, generator_output, generator_type):
-        self.A_tilde = generator_output
+    def __init__(self, generator_type):
         self.generator_type = generator_type
 
-    def function_p(self):
+    def function_p(self, A_tilde):
         if self.generator_type == 'fp':
-            return self.apply_elu()
+            return F.elu(A_tilde) + 1
         else:
-            return self.apply_relu()
+            return F.relu(A_tilde)
 
-    def apply_relu(self):
-        return F.relu(self.A_tilde)
 
-    def apply_elu(self):
-        return F.elu(self.A_tilde) + 1
+    def apply_adj_processor(self, A_tilde):
+        """
+        Applies the adjacency processor to A_tilde.
+        :param A_tilde: Output of the generator
+        :return: normalized A_tilde
+        """
 
-    def apply_adj_processor(self):
-
-        P_A_tilde = self.function_p()
+        P_A_tilde = self.function_p(A_tilde)
 
         # Symmetrize
         A_sym = 0.5 * (P_A_tilde + P_A_tilde.T)
