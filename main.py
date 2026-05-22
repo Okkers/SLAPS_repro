@@ -38,9 +38,18 @@ def main():
 
 
     parser.add_argument('--use_gpu', type = bool, default = True, help = "use gpu")
-    # ...
-    # ...
-    # ...
+
+    ### CLASSIFIER
+    parser.add_argument('--lr_c', type=float, default=0.01, help="Learning rate for the classifier GNN_C")
+    parser.add_argument('--dropout_c', type=float, default=0.5, help="Dropout probability for the classifier")
+
+    ### DENOISING AUTOENCODER
+    parser.add_argument('--dropout_DAE', type=float, default=0.5, help="Dropout probability for the DAE")
+    parser.add_argument('--lr_DAE', type=float, default=0.001, help="Learning rate for the denoising autoencoder GNN_DAE")
+
+    ### LAMBDA FOR JOINT LOSS
+    parser.add_argument('--lambda', dest='lambda_val', type=float, default=0.1,
+                        help="Controls the relative importance of the two losses")
 
     args = parser.parse_args()
 

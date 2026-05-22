@@ -18,7 +18,6 @@ class Model(nn.Module):
         self.r = configs.r
         self.eta = configs.eta
         self.noise_type = configs.noise_type
-        self.is_discrete = configs.is_discrete
 
         generator_dict = {
             "FullParametrization": FullParametrization,
