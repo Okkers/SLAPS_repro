@@ -3,3 +3,5 @@ venv/
 slaps_venv/
 
 data
+
+__pycache__
