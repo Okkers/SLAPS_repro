@@ -35,9 +35,9 @@ class GNN_C(nn.Module):
 
         return logits
 
-    def loss_c(self, A, X, labels):
-        logits = self.forward(A, X)
-        return F.cross_entropy(logits, labels)
+    # def loss_c(self, A, X, labels):
+    #     logits = self.forward(A, X)
+    #     return F.cross_entropy(logits, labels)
 
 
 

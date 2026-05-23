@@ -37,8 +37,13 @@ class Exp_Main(Exp_Basic):
         return model_optimizer
     
     def _select_metric(self):
-        metric = nn.MSELoss() # SOME LOSS FUNCTION 
-        return metric 
+        loss_classifier = nn.CrossEntropyLoss()
+
+        if self.args.is_discrete:
+            loss_gnn_dae = nn.BCELoss()
+        else:
+            loss_gnn_dae = nn.MSELoss()
+        return loss_classifier, loss_gnn_dae
     
     def _predict(self, batch_x, batch_y):
         # MAKE PREDICTION

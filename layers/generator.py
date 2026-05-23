@@ -15,7 +15,7 @@ class FullParametrization(nn.Module):
             torch.tensor(graph_utils.initialize_kNN_graph(features, k), dtype=torch.float32)
         )
 
-    def forward(self, ):
+    def forward(self):
         return self.A
     
 class MLP(nn.Module):
@@ -79,7 +79,7 @@ class MLP_D(nn.Module):
             x = x * weight # since we have a diagonal matrix, we can just do element multiplication
 
             if idx != len(self.mlp) - 1:
-                x = F.ReLU(x)
+                x = F.relu(x)
         
         # We need kNN(MLP(X)), so we need to do the kNN operation
         A_tilde = graph_utils.kNN_generator(x, self.k)
