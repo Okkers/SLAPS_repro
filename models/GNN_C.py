@@ -3,14 +3,14 @@ import torch.nn.functional as F
 
 
 class GNN_C(nn.Module):
-    def __init__(self, input_dim, hidden_dim=32, output_dim=None, dropout_adj=0.25):
+    def __init__(self, input_dim, hidden_dim=32, output_dim=None, dropout_c=0.25):
         """
         This will be called with A (output from adj_prep) and X (number of features).
 
         :param input_dim: num of features, taken from X.shape[1]
         :param hidden_dim: usually 32, but one dataset (ogbn-arxiv) 256, part B in Supplement
         :param output_dim: num of classes from data
-        :param dropout_adj: was tuned {0.25, 0.5}, to reproduce use params from Table 1 in Supplementary
+        :param dropout_c: adjacency dropout, was tuned {0.25, 0.5}, to reproduce use params from Table 1 in Supplementary
         """
 
         super(GNN_C, self).__init__()
@@ -19,7 +19,7 @@ class GNN_C(nn.Module):
         self.W_2 = nn.Linear(hidden_dim, output_dim, bias=False)
 
         self.dropout_feat = nn.Dropout(p=0.5)  # fixed at 0.5, applied after layer 1
-        self.dropout_adj = nn.Dropout(p=dropout_adj)
+        self.dropout_adj = nn.Dropout(p=dropout_c)
 
     def forward(self, A, X):
         # Dropout to adj matrix
