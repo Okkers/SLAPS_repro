@@ -94,7 +94,7 @@ class Exp_Main(Exp_Basic):
         model_optim = self._select_optimizer()
         loss_clf, loss_gnn_dae = self._select_metric()
 
-        log_every = getattr(self.args, "log_every", 10)
+        log_every = 10
 
         time_now = time.time()
 
