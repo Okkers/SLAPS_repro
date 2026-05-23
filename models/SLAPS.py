@@ -1,7 +1,8 @@
 import torch 
 import torch.nn as nn 
-from layers.GCN import GCN_C, GCN_DAE
 from layers.generator import FullParametrization, MLP, MLP_D
+from layers.GNN_C import GNN_C
+from layers.GNN_DAE import GNN_DAE
 
 class Model(nn.Module):
     '''
