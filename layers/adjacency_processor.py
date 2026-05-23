@@ -7,7 +7,7 @@ class AdjacencyProcessor:
     Depending on generator type we apply different function P, either relu or elu.
     """
 
-    def __init__(self, generator_type):
+    def __init__(self, generator_type=None):
         self.generator_type = generator_type
 
     def function_p(self, A_tilde):
