@@ -27,7 +27,7 @@ class Exp_Main(Exp_Basic):
         }
         features, labels, train_mask, val_mask, test_mask, f, c = self._get_data("train")
 
-        self.args.features = f
+        self.args.features = features
 
         model = model_dict[self.args.model].Model(self.args).float()
 
