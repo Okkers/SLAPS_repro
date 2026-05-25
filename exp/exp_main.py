@@ -57,7 +57,7 @@ class Exp_Main(Exp_Basic):
         loss_classifier = nn.CrossEntropyLoss()
 
         if self.args.is_discrete:
-            loss_gnn_dae = nn.BCELoss()
+            loss_gnn_dae = nn.BCEWithLogitsLoss()
         else:
             loss_gnn_dae = nn.MSELoss()
         return loss_classifier, loss_gnn_dae

@@ -17,7 +17,7 @@ def data_provider(args):
     elif args.dataset == "ogbn-arxiv":
         return load_ogbn_arxiv_data() 
     elif args.dataset == "mnist":
-        return load_mnist_data(args.trainingset_size)
+        return load_mnist_data(args.mnist_training_size)
     elif args.dataset in ["wine", "cancer", "digits", "20news"]:
         return load_sklearn_data(args.dataset) 
     else:

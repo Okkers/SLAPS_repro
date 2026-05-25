@@ -14,7 +14,7 @@ python -u main.py \
     --noise_type "not_zero" \
     --generator MLP \
     --gen_input_dim 13 \
-    --gen_layers_size 13 \
+    --gen_layers_size 2 \
     --gen_k 20 \
     --use_gpu True \
     --lr_c 0.01 \

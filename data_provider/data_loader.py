@@ -175,21 +175,43 @@ def load_sklearn_data(dataset_name):
         tuple: A tuple containing the features, labels, train_mask, val_mask, test_mask, number of features, and number of classes.
     """
     # First we load the dataset using the appropriate scikit-learn function based on the dataset name.
-    from sklearn.datasets import load_wine, load_breast_cancer, load_digits, fetch_20newsgroups_vectorized
+    from sklearn.datasets import load_wine, load_breast_cancer, load_digits, fetch_20newsgroups
     if dataset_name == "wine":
         data = load_wine()
+        features = data.data
+        labels = data.target
     elif dataset_name == "cancer":
         data = load_breast_cancer()
+        features = data.data
+        labels = data.target
     elif dataset_name == "digits":
         data = load_digits()
+        features = data.data
+        labels = data.target
     elif dataset_name == "20news":
-        data = fetch_20newsgroups_vectorized(subset='all')
+        from sklearn.feature_extraction.text import CountVectorizer
+        from sklearn.feature_extraction.text import TfidfTransformer
+        categories = ['alt.atheism',
+                      'comp.sys.ibm.pc.hardware',
+                      'misc.forsale',
+                      'rec.autos',
+                      'rec.sport.hockey',
+                      'sci.crypt',
+                      'sci.electronics',
+                      'sci.med',
+                      'sci.space',
+                      'talk.politics.guns'
+                      ]
+        data = fetch_20newsgroups(subset='all', categories=categories)
+        vectorizer = CountVectorizer(stop_words='english', min_df = 0.05)
+        X_counts = vectorizer.fit_transform(data.data).toarray()
+        transformer = TfidfTransformer(smooth_idf=False)
+        features = transformer.fit_transform(X_counts).todense()
+        labels = data.target
     else:
         raise ValueError(f"Dataset {dataset_name} not recognized.")
     
     # After loading the dataset, extract the relevant information
-    features = data.data
-    labels = data.target
     f = features.shape[1]
     c = len(np.unique(labels))
 
@@ -204,6 +226,9 @@ def load_sklearn_data(dataset_name):
         train_mask, val_mask, test_mask = mask_sklearn_data(features, labels, train_size=50, val_size=100, seed=42)
     elif dataset_name == "20news":
         train_mask, val_mask, test_mask = mask_sklearn_data(features, labels, train_size=100, val_size=200, seed=42)
+
+    # if sp.issparse(features):
+    #     features = features.toarray()
 
     features = torch.FloatTensor(features)
     labels = torch.LongTensor(labels)

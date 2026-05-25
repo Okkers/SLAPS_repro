@@ -3,11 +3,20 @@ import numpy as np
 import torch.nn.functional as F
 import torch
 
-def initialize_kNN_graph(X, k):
-    # A = kneighbors_graph(X=features, n_neighbors=k, mode='distance', metric='cosine', include_self=True)
-    # A = A.toarray()
-    # # A = A + np.eye(A.shape[0]) # Add self-loops
-    A = kNN_generator(X,k)
+def initialize_kNN_graph(X, k):  
+    X = F.normalize(X, p=2, dim=1) # Normalize the features to unit length
+    S = torch.mm(X, X.t()) # Compute the cosine similarity matrix; since we normalized, it is just the dot product
+
+    S_mask = S.clone() # exclude self loop such that we get self + k neighbours
+    S_mask.fill_diagonal_(-float('inf'))
+
+    topk = torch.topk(S_mask, k=k, dim=-1)
+    A = torch.zeros_like(S)
+    A.fill_diagonal_(1.0)
+    A.scatter_(dim=1, index=topk.indices, value=1.0)
+
+    A = A * 10.0 - 10.0 
+
     return A
 
 
@@ -19,10 +28,11 @@ def kNN_generator(X,k):
     S = torch.mm(X, X.t()) # Compute the cosine similarity matrix; since we normalized, it is just the dot product
 
     S_mask = S.clone() # exclude self loop such that we get self + k neighbours
-    S_mask.fill_diagonal_(float('inf'))
+    S_mask.fill_diagonal_(-float('inf'))
 
-    topk = torch.topk(S_mask, k=k, dim=-1)
+    topk = torch.topk(S, k=k, dim=-1)
     M = torch.zeros_like(S)
+    M.fill_diagonal_(1.0)
     M.scatter_(dim=1, index=topk.indices, value=1.0)
 
     M_S = M * S
