@@ -65,7 +65,13 @@ def main():
     Exp = Exp_Main
 
     if args.is_training:
+        all_accuracies = []
         for ii in range(args.itr):
+            current_seed = fix_seed + ii
+            random.seed(current_seed)
+            torch.manual_seed(current_seed)
+            np.random.seed(current_seed)
+
             setting =  '{}_{}_{}_{}'.format(args.model_id, args.model, args.dataset, ii)
 
             exp = Exp(args) 
@@ -73,15 +79,27 @@ def main():
             exp.train(setting)
 
             print("TESTING START: {}".format(setting))
-            exp.test(setting)
+            acc = exp.test(setting)
+            all_accuracies.append(acc)
 
             torch.cuda.empty_cache()
+
+        # calculate std and mean, save the results
+        if len(all_accuracies) > 0:
+            mean_acc = np.mean(all_accuracies) * 100
+            std_acc = np.std(all_accuracies) * 100
+
+            with open("results_std_mean.txt", "a") as f:
+                f.write(f"Experiment Setup: {args.model_id}_{args.model}_{args.dataset}\n")
+                f.write(f"Accuracies over {args.itr} runs: {[round(a * 100, 2) for a in all_accuracies]}\n")
+                f.write(f"Final Accuracy: {mean_acc:.2f} ± {std_acc:.2f}\n")
+                f.write("-" * 40 + "\n\n")
 
     else:
         exp = Exp(args)
         # TESTING
         # ------
-        # PLACHOLDER BUGFIXING FOR NOW, TO BE USED FOR TESTING + EVALUATION
+        # PLACEHOLDER BUGFIXING FOR NOW, TO BE USED FOR TESTING + EVALUATION
         # -----
         exp.bugfix()
         
