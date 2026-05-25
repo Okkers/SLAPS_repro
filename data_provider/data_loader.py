@@ -5,7 +5,7 @@ import torch
 import pickle as pkl
 import scipy.sparse as sp
 import warnings 
-
+from sklearn.preprocessing import StandardScaler
 warnings.filterwarnings('ignore')
 
 def mask(idx, shape):
@@ -180,10 +180,12 @@ def load_sklearn_data(dataset_name):
         data = load_wine()
         features = data.data
         labels = data.target
+        features = StandardScaler().fit_transform(features)
     elif dataset_name == "cancer":
         data = load_breast_cancer()
         features = data.data
         labels = data.target
+        features = StandardScaler().fit_transform(features)
     elif dataset_name == "digits":
         data = load_digits()
         features = data.data
