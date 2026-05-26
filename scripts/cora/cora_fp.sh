@@ -23,4 +23,5 @@ python -u main.py \
     --dropout_DAE 0.25 \
     --lambda_val 10 \
     --itr 10 \
-    --patience 500
+    --patience 500 \
+    --is_discrete
