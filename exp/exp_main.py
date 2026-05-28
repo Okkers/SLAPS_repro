@@ -27,7 +27,7 @@ class Exp_Main(Exp_Basic):
         }
         features, labels, train_mask, val_mask, test_mask, f, c = self._get_data("train")
 
-        self.args.features = f
+        self.args.features = features
 
         model = model_dict[self.args.model].Model(self.args).float()
 
@@ -57,7 +57,7 @@ class Exp_Main(Exp_Basic):
         loss_classifier = nn.CrossEntropyLoss()
 
         if self.args.is_discrete:
-            loss_gnn_dae = nn.BCELoss()
+            loss_gnn_dae = nn.BCEWithLogitsLoss()
         else:
             loss_gnn_dae = nn.MSELoss()
         return loss_classifier, loss_gnn_dae
