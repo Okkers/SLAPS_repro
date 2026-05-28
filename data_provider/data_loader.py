@@ -8,7 +8,7 @@ import warnings
 from sklearn.preprocessing import StandardScaler
 warnings.filterwarnings('ignore')
 
-def mask(idx, shape):
+def create_mask(idx, shape):
     """Creates a boolean mask for the given indices and shape.
     Args:
         idx (list): A list of indices to be masked.
@@ -53,19 +53,21 @@ def load_citation_data(dataset_name):
     Returns:
         tuple: A tuple containing the features, labels, train_mask, val_mask, test_mask, number of features, and number of classes.
     """
-    
-    x, y, tx, ty, allx, ally, graph, test_idx = extract_pickled_data(dataset_name)
 
-    # Citeseer dataset contains isolated nodes in the graph, so we find these and add them 
-    # as zero-vecs into the missing positions in the tx and ty matrices. 
-    if dataset_name == 'citeseer':
-        test_idx_full_range = range(min(test_idx), max(test_idx)+1)
+    # Resolve base name first before any file loading
+    base_name = dataset_name.replace('390', '').replace('370', '')
+    x, y, tx, ty, allx, ally, graph, test_idx = extract_pickled_data(base_name)
+
+    # Citeseer dataset contains isolated nodes in the graph, so we find these and add them
+    # as zero-vecs into the missing positions in the tx and ty matrices.
+    if base_name == 'citeseer':
+        test_idx_full_range = range(min(test_idx), max(test_idx) + 1)
         sorted_tx = sp.lil_matrix((len(test_idx_full_range), x.shape[1]))
         sorted_ty = np.zeros((len(test_idx_full_range), y.shape[1]))
 
         sorted_tx[np.sort(test_idx) - min(test_idx)] = tx[np.argsort(test_idx)]
         sorted_ty[np.sort(test_idx) - min(test_idx)] = ty[np.argsort(test_idx)]
-    else: 
+    else:
         # For other datasets, we can directly sort the tx and ty matrices using the sorted test indices.
         test_idx = np.array(test_idx)
         test_idx_norm = np.argsort(test_idx)
@@ -76,13 +78,19 @@ def load_citation_data(dataset_name):
     full_x = sp.vstack([allx, sorted_tx]).tolil()
     full_y = np.vstack([ally, sorted_ty])
 
-    train_idx_values = range(len(y)) # since y contains all the training labels, we can use its length to determine the training indices.
-    val_idx_values = range(len(y), len(y)+500) # Franceschi paper uses 500 nodes for validation
-    test_idx_values = np.sort(test_idx).tolist() # contains 1000 nodes for testing
+    train_idx_values = list(range(len(y)))  # since y contains all the training labels, we can use its length to determine the training indices.
+    val_idx_values = list(range(len(y), len(y) + 500))  # Franceschi paper uses 500 nodes for validation
+    test_idx_values = np.sort(test_idx).tolist()  # contains 1000 nodes for testing
 
-    mask_train = mask(train_idx_values, full_y.shape[0])
-    mask_val = mask(val_idx_values, full_y.shape[0])
-    mask_test = mask(test_idx_values, full_y.shape[0])
+    # cora390/citeseer370 - move first half of validation into training
+    if dataset_name in ['cora390', 'citeseer370']:
+        half = len(val_idx_values) // 2
+        train_idx_values = train_idx_values + val_idx_values[:half]
+        val_idx_values = val_idx_values[half:]
+
+    mask_train = create_mask(train_idx_values, full_y.shape[0])
+    mask_val = create_mask(val_idx_values, full_y.shape[0])
+    mask_test = create_mask(test_idx_values, full_y.shape[0])
 
     features = torch.FloatTensor(full_x.todense())
     labels = torch.LongTensor(full_y)
@@ -123,9 +131,9 @@ def load_ogbn_arxiv_data():
 
     split_idx = data.get_idx_split()
 
-    mask_train = mask(split_idx["train"], data.x.shape[0])
-    mask_val = mask(split_idx["valid"], data.x.shape[0])
-    mask_test = mask(split_idx["test"], data.x.shape[0])
+    mask_train = create_mask(split_idx["train"], data.x.shape[0])
+    mask_val = create_mask(split_idx["valid"], data.x.shape[0])
+    mask_test = create_mask(split_idx["test"], data.x.shape[0])
     
     features = torch.FloatTensor(features)
     labels = torch.LongTensor(labels).squeeze() # shape (num_nodes,)
@@ -162,9 +170,9 @@ def mask_sklearn_data(features, labels, train_size, val_size, seed=42):
         stratify=labels[temp_idx]
     )
 
-    train_mask = mask(train_idx, labels.shape[0])
-    val_mask = mask(val_idx, labels.shape[0])
-    test_mask = mask(test_idx, labels.shape[0])
+    train_mask = create_mask(train_idx, labels.shape[0])
+    val_mask = create_mask(val_idx, labels.shape[0])
+    test_mask = create_mask(test_idx, labels.shape[0])
     return train_mask, val_mask, test_mask
 
 def load_sklearn_data(dataset_name):
@@ -289,9 +297,9 @@ def load_mnist_data(trainingset_size):
         stratify=labels[temp_idx].numpy()
     )
 
-    train_mask = mask(train_idx, labels.shape[0])
-    val_mask = mask(val_idx, labels.shape[0])
-    test_mask = mask(test_idx, labels.shape[0])
+    train_mask = create_mask(train_idx, labels.shape[0])
+    val_mask = create_mask(val_idx, labels.shape[0])
+    test_mask = create_mask(test_idx, labels.shape[0])
 
     features = torch.FloatTensor(features)
     labels = torch.LongTensor(labels)
