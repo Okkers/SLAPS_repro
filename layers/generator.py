@@ -5,17 +5,18 @@ import utils.graph_utils as graph_utils
 
 
 class FullParametrization(nn.Module):
-    def __init__(self, features, k):
+    def __init__(self, configs):
         super(FullParametrization, self).__init__()
 
-        self.k = k
+        self.k = configs.gen_k
 
         # Initialize the adjacency matrix A as a learnable parameter using the kNN graph
         self.A = nn.Parameter(
-            torch.tensor(graph_utils.initialize_kNN_graph(features, k), dtype=torch.float32)
+            torch.tensor(graph_utils.initialize_kNN_graph(configs.features, configs.gen_k), dtype=torch.float32)
         )
 
-    def forward(self):
+    # Adding x just to keep consistency across generators
+    def forward(self, x):
         return self.A
     
 class MLP(nn.Module):
@@ -61,16 +62,16 @@ class MLP(nn.Module):
                     layer.bias.zero_()
 
 class MLP_D(nn.Module):
-    def __init__(self, layers_size, input_dim, k):
+    def __init__(self, configs):
         super(MLP_D, self).__init__()
-        self.input_dim = input_dim
-        self.output_dim = input_dim
-        self.k = k
+        self.input_dim = configs.gen_input_dim
+        self.output_dim = configs.gen_input_dim
+        self.k = configs.gen_k
 
         self.mlp = nn.ParameterList()
 
-        for _ in range(layers_size):
-            self.mlp.append(nn.Parameter(torch.ones(input_dim)))
+        for _ in range(configs.gen_layers_size):
+            self.mlp.append(nn.Parameter(torch.ones(configs.gen_input_dim)))
 
 
     def forward(self, x):

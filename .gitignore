@@ -1,7 +1,8 @@
 venv/
 .venv/
 slaps_venv/
-
+checkpoints/
+slaps/
 data
 
-__pycache__
+__pycache__/

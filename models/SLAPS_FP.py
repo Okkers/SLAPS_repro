@@ -1,8 +1,9 @@
 import torch 
 import torch.nn as nn 
-from layers.generator import FullParametrization, MLP, MLP_D
+from layers.generator import FullParametrization
 from layers.GNN_C import GNN_C
 from layers.GNN_DAE import GNN_DAE
+from layers.adjacency_processor import AdjacencyProcessor
 
 class Model(nn.Module):
     '''
@@ -20,20 +21,25 @@ class Model(nn.Module):
         self.eta = configs.eta
         self.noise_type = configs.noise_type
 
-        generator_dict = {
-            "FullParametrization": FullParametrization,
-            "MLP": MLP,
-            "MLP_D": MLP_D
-        }
-        self.generator = generator_dict[configs.generator](configs)
+        self.generator = FullParametrization(configs)
 
         # SELF.ADJACENCY_PROCESSOR NEEDED
-
+        self.adjacency_processor = AdjacencyProcessor(generator_type="fp")
 
         # GCNs ALSO NEED IMPLEMENTATION
-        self.gcn_c = GCN_C(configs)
+        self.gcn_c = GNN_C(
+            input_dim=self.input_dim,
+            hidden_dim=self.hidden_dim,
+            output_dim=self.out_dim,
+            dropout_c=configs.dropout_c
+        )
 
-        self.gcn_dae = GCN_DAE(configs)
+        self.gcn_dae = GNN_DAE(
+            input_dim=self.input_dim,
+            hidden_dim=self.hidden_dim,
+            output_dim=self.input_dim,
+            dropout_adj=configs.dropout_DAE
+        )
 
         # self.lambda_weight = configs.lambda_weight
 
@@ -52,13 +58,13 @@ class Model(nn.Module):
 
             # Let there be r% of ones corrupted (note. r should be passed as r=0.25 for %)
             num_ones = ones_mask.sum().item()
-            nums_ones_to_noise = int(round(self.r * num_ones))
+            nums_ones_to_noise = int(round((self.r / 100) * num_ones))
             ones_indices = ones_mask.view(-1).nonzero(as_tuple=False).squeeze()
             the_CHOSEN_ONES = ones_indices[torch.randperm(len(ones_indices))[:nums_ones_to_noise]]
 
             # Let there be r*eta% of zeros corrupted
             num_zeros = zeros_mask.sum().item()
-            num_zeros_to_noise = int(round(self.r * self.eta * num_zeros))
+            num_zeros_to_noise = int(round(self.r * self.eta * num_zeros / 100))
             zeros_indices = zeros_mask.view(-1).nonzero(as_tuple=False).squeeze()
             the_CHOSEN_zeros = zeros_indices[torch.randperm(len(zeros_indices))[:num_zeros_to_noise]]
 
@@ -72,7 +78,7 @@ class Model(nn.Module):
         
         # If dataset is continuous (Same section as before)
         else:
-            num_to_noise = int(round(self.r * n * f)) # n*f = x.dim1 * x.dim2
+            num_to_noise = int(round((self.r / 100) * n * f)) # n*f = x.dim1 * x.dim2
             the_chosen_indices = torch.randperm(n*f)[:num_to_noise] 
 
             mask = torch.zeros(n*f, dtype = torch.bool)
@@ -92,12 +98,14 @@ class Model(nn.Module):
         return x_tilde, mask
 
 
-    def forward(self, x, adj):
+    def forward(self, x):
+        adj = self.adjacency_processor.apply_adj_processor(self.generator(x))
+
         x_tilde, mask = self.add_noise(x)
     
-        logits_c = self.gcn_c(x, adj)
+        logits_c = self.gcn_c(adj, x)
 
-        x_reconstructed = self.gcn_dae(x_tilde, adj)
+        x_reconstructed = self.gcn_dae(adj, x_tilde)
 
         # Still need mask for the loss -> return it
         return logits_c, x_reconstructed, mask

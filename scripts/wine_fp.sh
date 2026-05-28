@@ -3,7 +3,9 @@ export CUDA_VISIBLE_DEVICES=1
 python -u main.py \
     --is_training 1 \
     --model_id TESTER_MODEL \
+    --dataset wine \
     --model SLAPS \
+    --train_epochs 100 \
     --input_dim 13 \
     --hidden_dim 32 \
     --output_dim 3 \
@@ -20,4 +22,4 @@ python -u main.py \
     --lr_DAE 0.001 \
     --dropout_c 0.5 \
     --dropout_DAE 0.5 \
-    --lambda 0.1 \
+    --lambda_val 0.1 \
