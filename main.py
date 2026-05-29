@@ -4,7 +4,7 @@ import torch
 from exp.exp_main import Exp_Main
 import random 
 import numpy as np 
-
+from utils.metrics import *
 
 def main():
     fix_seed = 42
@@ -65,7 +65,13 @@ def main():
     Exp = Exp_Main
 
     if args.is_training:
+        all_accuracies = []
         for ii in range(args.itr):
+            # current_seed = fix_seed + ii
+            # random.seed(current_seed)
+            # torch.manual_seed(current_seed)
+            # np.random.seed(current_seed)
+
             setting =  '{}_{}_{}_{}'.format(args.model_id, args.model, args.dataset, ii)
 
             exp = Exp(args) 
@@ -73,15 +79,19 @@ def main():
             exp.train(setting)
 
             print("TESTING START: {}".format(setting))
-            exp.test(setting)
+            acc = exp.test(setting)
+            all_accuracies.append(acc)
 
             torch.cuda.empty_cache()
+
+        # calculate and save the std and mean for all 10 runs
+        aggregate_metrics(all_accuracies, args)
 
     else:
         exp = Exp(args)
         # TESTING
         # ------
-        # PLACHOLDER BUGFIXING FOR NOW, TO BE USED FOR TESTING + EVALUATION
+        # PLACEHOLDER BUGFIXING FOR NOW, TO BE USED FOR TESTING + EVALUATION
         # -----
         exp.bugfix()
         

@@ -188,7 +188,7 @@ class Exp_Main(Exp_Basic):
         f.write("\n")
         f.close()
 
-        return
+        return test_acc
     
     def predict(self, setting):
         ### IMPLEMENT BATCH PREDICTION
