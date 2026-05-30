@@ -36,7 +36,7 @@ class Model(nn.Module):
 
         self.gcn_dae = GNN_DAE(
             input_dim=self.input_dim,
-            hidden_dim=self.hidden_dim,
+            hidden_dim=512,
             output_dim=self.input_dim,
             dropout_adj=configs.dropout_DAE
         )

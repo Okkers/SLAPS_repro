@@ -64,7 +64,7 @@ class Model(nn.Module):
 
             # Let there be r*eta% of zeros corrupted
             num_zeros = zeros_mask.sum().item()
-            num_zeros_to_noise = int(round(self.r * self.eta * num_zeros / 100))
+            num_zeros_to_noise = int(round(self.eta * nums_ones_to_noise))
             zeros_indices = zeros_mask.view(-1).nonzero(as_tuple=False).squeeze()
             the_CHOSEN_zeros = zeros_indices[torch.randperm(len(zeros_indices))[:num_zeros_to_noise]]
 
