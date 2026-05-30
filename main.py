@@ -55,6 +55,11 @@ def main():
     parser.add_argument('--lambda_val', dest='lambda_val', type=float, default=0.1,
                         help="Controls the relative importance of the two losses")
 
+    parser.add_argument('--weight_decay_c', type=float, default=0, help="Weight decay for classifier opt")
+    parser.add_argument('--weight_decay_dae', type=float, default=0, help="Weight decay for dae")
+
+    parser.add_argument('--hidden_dim_dae', type=int, default=32, help="hidden dimension for dae")
+
     args = parser.parse_args()
 
     args.use_gpu = True if torch.cuda.is_available() and args.use_gpu else False

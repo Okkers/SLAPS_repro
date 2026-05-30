@@ -46,8 +46,8 @@ class Exp_Main(Exp_Basic):
         # Keep learning rates disparate between GNN_C params and the rest  
         model_optimizer = optim.Adam(
             [
-                {"params": gcnc_params, "lr": self.args.lr_c},
-                {"params": rest, "lr": self.args.lr_DAE}
+                {"params": gcnc_params, "lr": self.args.lr_c, "weight_decay": self.args.weight_decay_c},
+                {"params": rest, "lr": self.args.lr_DAE, "weight_decay": self.args.weight_decay_dae},
             ]
         )
 
@@ -115,11 +115,7 @@ class Exp_Main(Exp_Basic):
             else:
                 dae_loss = loss_elementwise.mean()
 
-            # # In training loop
-            # if epoch < self.args.train_epochs // 5:
             total_loss = class_loss + self.args.lambda_val * dae_loss
-            # else:
-            #     total_loss = class_loss  # DAE loss disabled after first 400 epochs
 
             total_loss.backward()
             model_optim.step()

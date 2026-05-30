@@ -15,6 +15,7 @@ class Model(nn.Module):
         super(Model, self).__init__()
         self.input_dim = configs.input_dim
         self.hidden_dim = configs.hidden_dim
+        self.hidden_dim_dae = configs.hidden_dim_dae
         self.out_dim = configs.output_dim
         self.is_discrete = configs.is_discrete
         self.r = configs.r
@@ -37,7 +38,7 @@ class Model(nn.Module):
 
         self.gcn_dae = GNN_DAE(
             input_dim=self.input_dim,
-            hidden_dim=self.hidden_dim,
+            hidden_dim=self.hidden_dim_dae,
             output_dim=self.input_dim,
             dropout_adj=configs.dropout_DAE
         )

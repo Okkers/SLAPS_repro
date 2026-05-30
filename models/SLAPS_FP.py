@@ -15,6 +15,7 @@ class Model(nn.Module):
         super(Model, self).__init__()
         self.input_dim = configs.input_dim
         self.hidden_dim = configs.hidden_dim
+        self.hidden_dim_dae = configs.hidden_dim_dae
         self.out_dim = configs.output_dim
         self.is_discrete = configs.is_discrete
         self.r = configs.r
@@ -36,7 +37,7 @@ class Model(nn.Module):
 
         self.gcn_dae = GNN_DAE(
             input_dim=self.input_dim,
-            hidden_dim=self.hidden_dim,
+            hidden_dim=self.hidden_dim_dae,
             output_dim=self.input_dim,
             dropout_adj=configs.dropout_DAE
         )
@@ -79,9 +80,9 @@ class Model(nn.Module):
         # If dataset is continuous (Same section as before)
         else:
             num_to_noise = int(round((self.r / 100) * n * f)) # n*f = x.dim1 * x.dim2
-            the_chosen_indices = torch.randperm(n*f)[:num_to_noise] 
+            the_chosen_indices = torch.randperm(n*f, device=x.device)[:num_to_noise]
 
-            mask = torch.zeros(n*f, dtype = torch.bool)
+            mask = torch.zeros(n*f, dtype=torch.bool, device=x.device)
             mask[the_chosen_indices] = True 
             mask = mask.view(n, f)
 
@@ -102,7 +103,7 @@ class Model(nn.Module):
         adj = self.adjacency_processor.apply_adj_processor(self.generator(x))
 
         x_tilde, mask = self.add_noise(x)
-    
+
         logits_c = self.gcn_c(adj, x)
 
         x_reconstructed = self.gcn_dae(adj, x_tilde)
