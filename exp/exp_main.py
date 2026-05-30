@@ -57,9 +57,9 @@ class Exp_Main(Exp_Basic):
         loss_classifier = nn.CrossEntropyLoss()
 
         if self.args.is_discrete:
-            loss_gnn_dae = nn.BCEWithLogitsLoss()
+            loss_gnn_dae = nn.BCEWithLogitsLoss(reduction='none')
         else:
-            loss_gnn_dae = nn.MSELoss()
+            loss_gnn_dae = nn.MSELoss(reduction='none')
         return loss_classifier, loss_gnn_dae
     
     def _predict(self, batch_x, batch_y):
@@ -106,14 +106,21 @@ class Exp_Main(Exp_Basic):
 
             class_loss = loss_clf(logits_c[train_mask], labels[train_mask])
 
-            if noise_mask.dtype != torch.bool:
-                noise_mask = noise_mask.bool()
-            if noise_mask.any():
-                dae_loss = loss_gnn_dae(x_reconstructed[noise_mask], features[noise_mask])
-            else:
-                dae_loss = loss_gnn_dae(x_reconstructed, features)
+            # had to compute mean this way
+            noise_mask = noise_mask.detach()
+            loss_elementwise = loss_gnn_dae(x_reconstructed, features)
 
+            if noise_mask.any():
+                dae_loss = (loss_elementwise * noise_mask.float()).sum() / noise_mask.float().sum()
+            else:
+                dae_loss = loss_elementwise.mean()
+
+            # # In training loop
+            # if epoch < self.args.train_epochs // 5:
             total_loss = class_loss + self.args.lambda_val * dae_loss
+            # else:
+            #     total_loss = class_loss  # DAE loss disabled after first 400 epochs
+
             total_loss.backward()
             model_optim.step()
 
