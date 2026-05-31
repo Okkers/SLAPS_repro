@@ -11,7 +11,7 @@ python -u main.py \
     --output_dim 7 \
     --r 10 \
     --eta 5 \
-    --noise_type "not_zero" \
+    --noise_type "zero" \
     --generator MLP \
     --gen_input_dim 1433 \
     --gen_layers_size 2 \
@@ -24,4 +24,6 @@ python -u main.py \
     --lambda_val 10 \
     --itr 10 \
     --patience 500 \
-    --is_discrete
+    --is_discrete \
+    --weight_decay_c 0.0005 \
+    --hidden_dim_dae 512

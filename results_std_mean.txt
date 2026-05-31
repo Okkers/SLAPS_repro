@@ -198,8 +198,52 @@ Accuracies over 10 runs: [70.2, 69.3, 68.7, 69.9, 69.4, 69.7, 67.1, 69.5, 68.7, 
 Final Accuracy: 69.14 ± 0.83
 ----------------------------------------
 
+Experiment Setup: CITESEER_TEST_SLAPS_FP_citeseer
+Accuracies over 10 runs: [69.8, 68.9, 69.8, 70.2, 69.5, 69.2, 70.0, 69.3, 69.7, 69.9]
+Final Accuracy: 69.63 ± 0.38
+----------------------------------------
+
+Experiment Setup: WINE_TEST_SLAPS_FP_wine
+Accuracies over 10 runs: [96.62, 97.3, 97.3, 97.3, 97.3, 97.3, 97.3, 97.3, 96.62, 96.62]
+Final Accuracy: 97.09 ± 0.31
+----------------------------------------
+
 Experiment Setup: CORA_TEST_SLAPS_FP_cora
 Accuracies over 10 runs: [69.5, 69.8, 68.7, 69.6, 70.8, 68.6, 69.5, 68.9, 70.0, 70.9]
 Final Accuracy: 69.63 ± 0.75
+----------------------------------------
+
+Experiment Setup: CORA_TEST_SLAPS_FP_cora
+Accuracies over 10 runs: [69.7, 70.2, 70.5, 70.4, 70.2, 68.8, 68.9, 70.6, 70.0, 70.8]
+Final Accuracy: 70.01 ± 0.65
+----------------------------------------
+Experiment Setup: CORA_TEST_SLAPS_FP_cora
+Accuracies over 10 runs: [70.3, 70.2, 69.9, 70.5, 71.5, 68.9, 69.6, 70.3, 68.9, 70.5]
+Final Accuracy: 70.06 ± 0.74
+----------------------------------------
+
+Experiment Setup: CITESEER_TEST_SLAPS_FP_citeseer
+Accuracies over 10 runs: [69.6, 68.9, 69.9, 70.0, 69.5, 69.4, 71.0, 69.9, 70.3, 70.3]
+Final Accuracy: 69.88 ± 0.55
+----------------------------------------
+
+Experiment Setup: CITESEER_TEST_SLAPS_FP_citeseer
+Accuracies over 10 runs: [69.8, 69.1, 69.5, 69.9, 70.5, 68.5, 70.1, 71.0, 69.3, 70.4]
+Final Accuracy: 69.81 ± 0.70
+----------------------------------------
+
+Experiment Setup: CITESEER_TEST_SLAPS_FP_citeseer370
+Accuracies over 10 runs: [73.6, 73.3, 72.8, 72.7, 73.0, 72.7, 73.5, 73.0, 73.5, 73.2]
+Final Accuracy: 73.13 ± 0.32
+----------------------------------------
+
+Experiment Setup: CITESEER_TEST_SLAPS_MLPD_citeseer
+Accuracies over 10 runs: [68.8, 72.0, 69.1, 70.7, 71.7, 70.5, 69.0, 71.6, 70.9, 73.2]
+Final Accuracy: 70.75 ± 1.37
+----------------------------------------
+
+Experiment Setup: CITESEER_TEST_SLAPS_MLP_citeseer
+Accuracies over 10 runs: [71.4, 66.3, 69.9, 70.3, 69.9, 67.9, 69.0, 70.6, 69.6, 67.8]
+Final Accuracy: 69.27 ± 1.46
 ----------------------------------------
 
