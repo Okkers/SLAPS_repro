@@ -15,6 +15,7 @@ class Model(nn.Module):
         super(Model, self).__init__()
         self.input_dim = configs.input_dim
         self.hidden_dim = configs.hidden_dim
+        self.hidden_dim_dae = configs.hidden_dim_dae
         self.out_dim = configs.output_dim
         self.is_discrete = configs.is_discrete
         self.r = configs.r
@@ -37,7 +38,7 @@ class Model(nn.Module):
 
         self.gcn_dae = GNN_DAE(
             input_dim=self.input_dim,
-            hidden_dim=self.hidden_dim,
+            hidden_dim=self.hidden_dim_dae,
             output_dim=self.input_dim,
             dropout_adj=configs.dropout_DAE
         )
@@ -65,7 +66,7 @@ class Model(nn.Module):
 
             # Let there be r*eta% of zeros corrupted
             num_zeros = zeros_mask.sum().item()
-            num_zeros_to_noise = int(round((self.r * self.eta / 100) * num_zeros))
+            num_zeros_to_noise = int(round(self.eta * nums_ones_to_noise))
             zeros_indices = zeros_mask.view(-1).nonzero(as_tuple=False).squeeze()
             the_CHOSEN_zeros = zeros_indices[torch.randperm(len(zeros_indices))[:num_zeros_to_noise]]
 
@@ -79,11 +80,11 @@ class Model(nn.Module):
         
         # If dataset is continuous (Same section as before)
         else:
-            num_to_noise = int(round((self.r / 100) * n * f)) # n*f = x.dim1 * x.dim2
-            the_chosen_indices = torch.randperm(n*f)[:num_to_noise] 
+            num_to_noise = int(round((self.r / 100) * n * f))  # n*f = x.dim1 * x.dim2
+            the_chosen_indices = torch.randperm(n * f, device=x.device)[:num_to_noise]
 
-            mask = torch.zeros(n*f, dtype = torch.bool)
-            mask[the_chosen_indices] = True 
+            mask = torch.zeros(n * f, dtype=torch.bool, device=x.device)
+            mask[the_chosen_indices] = True
             mask = mask.view(n, f)
 
             if self.noise_type == "zero":

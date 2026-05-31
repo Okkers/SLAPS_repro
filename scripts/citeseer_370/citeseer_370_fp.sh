@@ -5,23 +5,25 @@ python -u main.py \
     --train_epochs 2000 \
     --model_id CITESEER_TEST \
     --dataset citeseer370 \
-    --model SLAPS_MLP \
+    --model SLAPS_FP \
     --input_dim 3703 \
     --hidden_dim 32 \
     --output_dim 6 \
     --r 10 \
-    --eta 5 \
+    --eta 1 \
     --noise_type "not_zero" \
-    --generator MLP \
+    --generator FP \
     --gen_input_dim 3703 \
     --gen_layers_size 2 \
     --gen_k 30 \
     --use_gpu True \
     --lr_c 0.01 \
-    --lr_DAE 0.001 \
-    --dropout_c 0.25 \
+    --lr_DAE 0.01 \
+    --dropout_c 0.5 \
     --dropout_DAE 0.5 \
-    --lambda_val 10 \
+    --lambda_val 1 \
     --itr 10 \
     --patience 500 \
-    --is_discrete
+    --is_discrete \
+    --hidden_dim_dae 1024 \
+    --weight_decay_c 0.05

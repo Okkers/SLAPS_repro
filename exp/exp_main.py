@@ -46,8 +46,8 @@ class Exp_Main(Exp_Basic):
         # Keep learning rates disparate between GNN_C params and the rest  
         model_optimizer = optim.Adam(
             [
-                {"params": gcnc_params, "lr": self.args.lr_c},
-                {"params": rest, "lr": self.args.lr_DAE}
+                {"params": gcnc_params, "lr": self.args.lr_c, "weight_decay": self.args.weight_decay_c},
+                {"params": rest, "lr": self.args.lr_DAE, "weight_decay": self.args.weight_decay_dae},
             ]
         )
 
@@ -57,9 +57,9 @@ class Exp_Main(Exp_Basic):
         loss_classifier = nn.CrossEntropyLoss()
 
         if self.args.is_discrete:
-            loss_gnn_dae = nn.BCEWithLogitsLoss()
+            loss_gnn_dae = nn.BCEWithLogitsLoss(reduction='none')
         else:
-            loss_gnn_dae = nn.MSELoss()
+            loss_gnn_dae = nn.MSELoss(reduction='none')
         return loss_classifier, loss_gnn_dae
     
     def _predict(self, batch_x, batch_y):
@@ -106,14 +106,17 @@ class Exp_Main(Exp_Basic):
 
             class_loss = loss_clf(logits_c[train_mask], labels[train_mask])
 
-            if noise_mask.dtype != torch.bool:
-                noise_mask = noise_mask.bool()
+            # had to compute mean this way
+            noise_mask = noise_mask.detach()
+            loss_elementwise = loss_gnn_dae(x_reconstructed, features)
+
             if noise_mask.any():
-                dae_loss = loss_gnn_dae(x_reconstructed[noise_mask], features[noise_mask])
+                dae_loss = (loss_elementwise * noise_mask.float()).sum() / noise_mask.float().sum()
             else:
-                dae_loss = loss_gnn_dae(x_reconstructed, features)
+                dae_loss = loss_elementwise.mean()
 
             total_loss = class_loss + self.args.lambda_val * dae_loss
+
             total_loss.backward()
             model_optim.step()
 
