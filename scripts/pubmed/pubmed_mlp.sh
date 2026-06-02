@@ -23,4 +23,6 @@ python -u main.py \
     --dropout_DAE 0.5 \
     --lambda_val 10 \
     --itr 10 \
-    --patience 500
+    --patience 500 \
+    --weight_decay_c 0.0005 \
+    --hidden_dim_dae 128

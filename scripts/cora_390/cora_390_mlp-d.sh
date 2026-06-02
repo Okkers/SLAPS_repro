@@ -24,4 +24,6 @@ python -u main.py \
     --lambda_val 10 \
     --itr 10 \
     --patience 500 \
-    --is_discrete
+    --is_discrete \
+    --weight_decay_c 0.0005 \
+    --hidden_dim_dae 512

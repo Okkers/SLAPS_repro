@@ -3,7 +3,7 @@ export CUDA_VISIBLE_DEVICES=1
 python -u main.py \
     --is_training 1 \
     --train_epochs 2000 \
-    --model_id CITESEER_TEST \
+    --model_id CITESEER_TEST0 \
     --dataset citeseer \
     --model SLAPS_FP \
     --input_dim 3703 \
