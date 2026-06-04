@@ -110,7 +110,7 @@ def load_citation_data(dataset_name):
     c = labels.max().item() + 1 # number of classes (0 is also a class)
     return features, labels, train_mask, val_mask, test_mask, f, c
 
-# features, labels, train_mask, val_mask, test_mask, f, c = load_citation_data('citeseer')
+# graph, features, labels, train_mask, val_mask, test_mask, f, c = load_citation_data('citeseer')
     
 def load_ogbn_arxiv_data():
     """Loads the OGBN-Arxiv dataset.

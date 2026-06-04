@@ -54,6 +54,18 @@ def main():
     ### LAMBDA FOR JOINT LOSS
     parser.add_argument('--lambda_val', dest='lambda_val', type=float, default=0.1,
                         help="Controls the relative importance of the two losses")
+    
+    ### SELF-TRAINING
+    parser.add_argument('--self_training', type = bool, default = False, help="Include self-training step or not.")
+    parser.add_argument('--self_training_zeta', type=int, default=50)
+
+    ### ADA EDGE
+    parser.add_argument('--ada_edge', type=bool, default=False, help="Run ada edge.")
+    parser.add_argument('--conf_threshold', type=float, default=0.9, help="Threshold for probability per class.")
+    parser.add_argument('--max_add', type=int, default=10, help="Max edges added.")
+    parser.add_argument('--max_remove', type=int, default=10, help="Max edges removed.")
+    parser.add_argument('--max_iter', type=int, default=10, help="Max iterations.")
+    parser.add_argument('--order', type=str, default="add", help="Start with add or remove edges.")
 
     args = parser.parse_args()
 
@@ -79,7 +91,10 @@ def main():
             exp.train(setting)
 
             print("TESTING START: {}".format(setting))
-            acc = exp.test(setting)
+            if args.ada_edge:
+                acc = exp.test_ada_edge(setting)
+            else:
+                acc = exp.test(setting)
             all_accuracies.append(acc)
 
             torch.cuda.empty_cache()

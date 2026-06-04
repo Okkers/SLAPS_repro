@@ -99,7 +99,7 @@ class Model(nn.Module):
         return x_tilde, mask
 
 
-    def forward(self, x):
+    def forward(self, x, get_adj=False):
         adj = self.adjacency_processor.apply_adj_processor(self.generator(x))
 
         x_tilde, mask = self.add_noise(x)
@@ -107,6 +107,9 @@ class Model(nn.Module):
         logits_c = self.gcn_c(adj, x)
 
         x_reconstructed = self.gcn_dae(adj, x_tilde)
+
+        if get_adj:
+            return logits_c, x_reconstructed, mask, adj
 
         # Still need mask for the loss -> return it
         return logits_c, x_reconstructed, mask
