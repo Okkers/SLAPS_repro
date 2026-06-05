@@ -316,3 +316,33 @@ Final Accuracy: 69.96 ± 0.80
 
 
 
+Experiment Setup: CORA_TEST_lambda_0_SLAPS_MLP_cora
+Accuracies over 10 runs: [64.8, 63.9, 64.9, 65.6, 63.7, 64.8, 63.9, 64.6, 67.0, 65.4]
+Final Accuracy: 64.86 ± 0.93
+----------------------------------------
+
+Experiment Setup: CORA_TEST_lambda0.1_SLAPS_MLP_cora
+Accuracies over 10 runs: [67.2, 65.2, 66.2, 65.7, 63.1, 67.1, 68.4, 68.6, 67.4, 68.3]
+Final Accuracy: 66.72 ± 1.63
+----------------------------------------
+
+Experiment Setup: CORA_TEST_lambda1.0_SLAPS_MLP_cora
+Accuracies over 10 runs: [68.4, 68.5, 69.6, 69.9, 69.9, 69.1, 70.3, 70.2, 70.5, 69.0]
+Final Accuracy: 69.54 ± 0.71
+----------------------------------------
+
+Experiment Setup: CORA_TEST_lambda10_SLAPS_MLP_cora
+Accuracies over 10 runs: [69.5, 71.7, 69.0, 70.7, 68.8, 70.8, 69.2, 69.8, 68.6, 71.0]
+Final Accuracy: 69.91 ± 1.01
+----------------------------------------
+
+Experiment Setup: CORA_TEST_lambda10_SLAPS_MLP_cora
+Accuracies over 10 runs: [69.7, 70.3, 71.9, 69.5, 71.8, 67.2, 68.8, 67.6, 69.8, 67.5]
+Final Accuracy: 69.41 ± 1.59
+----------------------------------------
+
+Experiment Setup: CITESEER_TEST_l0_SLAPS_MLP_citeseer
+Accuracies over 10 runs: [68.1, 66.8, 65.6, 63.5, 62.8, 62.1, 63.7, 59.7, 65.3, 66.7]
+Final Accuracy: 64.43 ± 2.41
+----------------------------------------
+
