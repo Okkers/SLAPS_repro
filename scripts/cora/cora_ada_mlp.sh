@@ -25,9 +25,11 @@ python -u main.py \
     --itr 10 \
     --patience 500 \
     --is_discrete \
-    --ada_edge True \
+    --ada_edge \
     --conf_threshold 0.9 \
     --max_add 10 \
     --max_remove 10 \
     --max_iter 10 \
-    --order "add"
+    --order "add" \
+    --use_gpu True \
+    --gpu 0 \

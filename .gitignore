@@ -4,5 +4,7 @@ slaps_venv/
 checkpoints/
 slaps/
 data
+containers/
+logs/
 
 __pycache__/

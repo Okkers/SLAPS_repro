@@ -42,6 +42,9 @@ def main():
 
 
     parser.add_argument('--use_gpu', type = bool, default = True, help = "use gpu")
+    parser.add_argument('--gpu', type = int, default = 0, help = "gpu")
+    parser.add_argument('--use_multi_gpu', action = 'store_true', help = "use multiple gpus")
+    parser.add_argument('--devices', type = str, default = "0", help = "device ids for multi gpu")
 
     ### CLASSIFIER
     parser.add_argument('--lr_c', type=float, default=0.01, help="Learning rate for the classifier GNN_C")
@@ -56,11 +59,11 @@ def main():
                         help="Controls the relative importance of the two losses")
     
     ### SELF-TRAINING
-    parser.add_argument('--self_training', type = bool, default = False, help="Include self-training step or not.")
+    parser.add_argument('--self_training', action='store_true', help="Include self-training step or not.")
     parser.add_argument('--self_training_zeta', type=int, default=50)
 
     ### ADA EDGE
-    parser.add_argument('--ada_edge', type=bool, default=False, help="Run ada edge.")
+    parser.add_argument('--ada_edge', action='store_true', help="Run ada edge.")
     parser.add_argument('--conf_threshold', type=float, default=0.9, help="Threshold for probability per class.")
     parser.add_argument('--max_add', type=int, default=10, help="Max edges added.")
     parser.add_argument('--max_remove', type=int, default=10, help="Max edges removed.")

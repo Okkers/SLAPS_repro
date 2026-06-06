@@ -25,5 +25,8 @@ python -u main.py \
     --itr 10 \
     --patience 500 \
     --is_discrete \
-    --self_training True \
-    --self_training_zeta 50
+    --self_training \
+    --self_training_zeta 50 \
+    --use_gpu True \
+    --gpu 0 \
+    
