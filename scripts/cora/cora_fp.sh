@@ -11,7 +11,7 @@ python -u main.py \
     --output_dim 7 \
     --r 10 \
     --eta 5 \
-    --noise_type "not_zero" \
+    --noise_type "zero" \
     --generator FP \
     --gen_input_dim 1433 \
     --gen_layers_size 2 \
@@ -21,7 +21,10 @@ python -u main.py \
     --lr_DAE 0.01 \
     --dropout_c 0.5 \
     --dropout_DAE 0.25 \
-    --lambda_val 10 \
+    --lambda_val 10.0 \
     --itr 10 \
-    --patience 500 \
-    --is_discrete
+    --patience 2000 \
+    --is_discrete \
+    --hidden_dim_dae 512 \
+    --weight_decay_c 0.0005 \
+    --hidden_dim_dae 512

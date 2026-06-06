@@ -70,6 +70,11 @@ def main():
     parser.add_argument('--max_iter', type=int, default=10, help="Max iterations.")
     parser.add_argument('--order', type=str, default="add", help="Start with add or remove edges.")
 
+    parser.add_argument('--weight_decay_c', type=float, default=0, help="Weight decay for classifier opt")
+    parser.add_argument('--weight_decay_dae', type=float, default=0, help="Weight decay for dae")
+
+    parser.add_argument('--hidden_dim_dae', type=int, default=32, help="hidden dimension for dae")
+
     args = parser.parse_args()
 
     args.use_gpu = True if torch.cuda.is_available() and args.use_gpu else False

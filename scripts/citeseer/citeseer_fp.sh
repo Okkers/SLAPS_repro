@@ -3,7 +3,7 @@ export CUDA_VISIBLE_DEVICES=1
 python -u main.py \
     --is_training 1 \
     --train_epochs 2000 \
-    --model_id CITESEER_TEST \
+    --model_id CITESEER_TEST0 \
     --dataset citeseer \
     --model SLAPS_FP \
     --input_dim 3703 \
@@ -21,7 +21,9 @@ python -u main.py \
     --lr_DAE 0.01 \
     --dropout_c 0.5 \
     --dropout_DAE 0.5 \
-    --lambda_val 1 \
+    --lambda_val 1.0 \
     --itr 10 \
-    --patience 500 \
-    --is_discrete
+    --patience 200 \
+    --is_discrete \
+    --hidden_dim_dae 1024 \
+    --weight_decay_c 0.05
