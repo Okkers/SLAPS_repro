@@ -1,4 +1,4 @@
-export CUDA_VISIBLE_DEVICES=1
+export CUDA_VISIBLE_DEVICES=0
 
 python -u main.py \
     --is_training 1 \
@@ -9,7 +9,7 @@ python -u main.py \
     --input_dim 64 \
     --hidden_dim 32 \
     --output_dim 10 \
-    --r 5 \
+    --r 20 \
     --eta 5 \
     --noise_type "not_zero" \
     --generator MLP-D \
@@ -23,4 +23,8 @@ python -u main.py \
     --dropout_DAE 0.25 \
     --lambda_val 0.1 \
     --itr 10 \
-    --patience 2000
+    --patience 500 \
+    --weight_decay_c 0.002 \
+    --hidden_dim_dae 64
+
+

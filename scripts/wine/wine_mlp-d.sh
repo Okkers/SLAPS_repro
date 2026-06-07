@@ -1,4 +1,4 @@
-export CUDA_VISIBLE_DEVICES=1
+export CUDA_VISIBLE_DEVICES=0
 
 python -u main.py \
     --is_training 1 \
@@ -24,4 +24,6 @@ python -u main.py \
     --lambda_val 1.0 \
     --itr 10 \
     --patience  500 \
+    --hidden_dim_dae 64 \
+    --weight_decay_c 0.002
 

@@ -1,4 +1,4 @@
-export CUDA_VISIBLE_DEVICES=1
+export CUDA_VISIBLE_DEVICES=0
 
 python -u main.py \
     --is_training 1 \
@@ -24,3 +24,4 @@ python -u main.py \
     --lambda_val 10 \
     --itr 10 \
     --patience 300
+
