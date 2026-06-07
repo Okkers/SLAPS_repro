@@ -26,4 +26,4 @@ python -u main.py \
     --patience 500 \
     --is_discrete \
     --weight_decay_c 0.05 \
-    --hidden_dim_dae 1024
+    --hidden_dim_dae 512
