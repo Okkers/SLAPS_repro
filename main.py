@@ -60,6 +60,10 @@ def main():
 
     parser.add_argument('--hidden_dim_dae', type=int, default=32, help="hidden dimension for dae")
 
+    parser.add_argument('--epoch_dae', type=int, default=2000, help="epochs used for DAE training")
+    parser.add_argument('--slaps2s', type=bool, default=False, help="Run SLAPS2s two-stage training variant for figure 5")
+    parser.add_argument('--slaps2s_t', type=int, default=20, help="Evaluate classifier every t epochs in SLAPS2s")
+
     args = parser.parse_args()
 
     args.use_gpu = True if torch.cuda.is_available() and args.use_gpu else False
@@ -81,10 +85,18 @@ def main():
 
             exp = Exp(args) 
             print("TRAINING START: {}".format(setting))
-            exp.train(setting)
+
+            if args.slaps2s:
+                print("Training SLAPS_2s")
+                exp.train_2s(setting)
+                acc = exp.test_2s(setting)
+            else:
+                exp.train(setting)
+                acc = exp.test(setting)
+
 
             print("TESTING START: {}".format(setting))
-            acc = exp.test(setting)
+
             all_accuracies.append(acc)
 
             torch.cuda.empty_cache()
