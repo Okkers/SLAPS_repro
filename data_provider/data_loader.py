@@ -6,6 +6,9 @@ import pickle as pkl
 import scipy.sparse as sp
 import warnings 
 from sklearn.preprocessing import StandardScaler
+from torch_geometric.utils import negative_sampling
+
+
 warnings.filterwarnings('ignore')
 
 def create_mask(idx, shape):
@@ -108,7 +111,16 @@ def load_citation_data(dataset_name):
     
     labels = torch.argmax(labels, dim=1)
     c = labels.max().item() + 1 # number of classes (0 is also a class)
-    return features, labels, train_mask, val_mask, test_mask, f, c
+
+    src, dst = [], []
+    for node, neighbors in graph.items():
+        for neighbor in neighbors:
+            src.append(node)
+            dst.append(neighbor)
+    edge_index = torch.tensor([src, dst], dtype=torch.long)
+
+
+    return features, labels, train_mask, val_mask, test_mask, f, c, edge_index
 
 # features, labels, train_mask, val_mask, test_mask, f, c = load_citation_data('citeseer')
     
@@ -140,7 +152,7 @@ def load_ogbn_arxiv_data():
     train_mask = torch.BoolTensor(mask_train)
     val_mask = torch.BoolTensor(mask_val)
     test_mask = torch.BoolTensor(mask_test)
-    
+
     return features, labels, train_mask, val_mask, test_mask, f, c
 
 # load_ogbn_arxiv_data()
@@ -310,3 +322,4 @@ def load_mnist_data(trainingset_size):
     return features, labels, train_mask, val_mask, test_mask, f, c
 
 # load_mnist_data(3000)
+

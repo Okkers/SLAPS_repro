@@ -1,4 +1,4 @@
-from data_provider.data_factory import data_provider
+from data_provider.data_factory import data_provider, apply_noise_to_graph
 from exp.exp_basic import Exp_Basic
 from layers.GNN_C import GNN_C
 from models import SLAPS_FP, SLAPS_MLP, SLAPS_MLPD
@@ -26,7 +26,11 @@ class Exp_Main(Exp_Basic):
             "SLAPS_MLP": SLAPS_MLP,
             "SLAPS_MLPD": SLAPS_MLPD
         }
-        features, labels, train_mask, val_mask, test_mask, f, c = self._get_data("train")
+        features, labels, train_mask, val_mask, test_mask, f, c = self._get_data("train")[:7]
+
+        if len(self._get_data("train")) == 8:
+            edges_indexes = self._get_data("train")[7]
+            self.args.edges_indexes = apply_noise_to_graph(edges_indexes, features.shape[0], self.args.perturbated_rho)
 
         self.args.features = features
 
@@ -77,7 +81,7 @@ class Exp_Main(Exp_Basic):
     
 
     def train(self, setting):
-        features, labels, train_mask, val_mask, test_mask, f, c = self._get_data("train")
+        features, labels, train_mask, val_mask, test_mask, f, c = self._get_data("train")[:7]
         features = features.to(self.device)
         labels = labels.to(self.device)
         train_mask = train_mask.to(self.device)
@@ -290,7 +294,7 @@ class Exp_Main(Exp_Basic):
         return
 
     def test(self, setting):
-        features, labels, train_mask, val_mask, test_mask, f, c = self._get_data("test")
+        features, labels, train_mask, val_mask, test_mask, f, c = self._get_data("test")[:7]
         features = features.to(self.device)
         labels = labels.to(self.device)
         test_mask = test_mask.to(self.device)

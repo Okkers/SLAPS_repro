@@ -10,10 +10,23 @@ class FullParametrization(nn.Module):
 
         self.k = configs.gen_k
 
-        # Initialize the adjacency matrix A as a learnable parameter using the kNN graph
-        self.A = nn.Parameter(
-            torch.tensor(graph_utils.initialize_kNN_graph(configs.features, configs.gen_k), dtype=torch.float32)
-        )
+        if not configs.perturbated_rho > 0:
+            # Initialize the adjacency matrix A as a learnable parameter using the kNN graph
+            self.A = nn.Parameter(
+                torch.tensor(graph_utils.initialize_kNN_graph(configs.features, configs.gen_k), dtype=torch.float32)
+            )
+        else:
+            print("perturbated input")
+
+            num_nodes = configs.features.shape[0]
+            initial_adj = torch.zeros((num_nodes, num_nodes), dtype=torch.float32)
+
+            # they have both perturbated and not
+            edges = configs.edges_indexes
+
+            initial_adj[edges[0], edges[1]] = 1.0
+            initial_adj = initial_adj * 10.0 - 10.0
+            self.A = nn.Parameter(initial_adj)
 
     # Adding x just to keep consistency across generators
     def forward(self, x):

@@ -64,6 +64,8 @@ def main():
     parser.add_argument('--slaps2s', type=bool, default=False, help="Run SLAPS2s two-stage training variant for figure 5")
     parser.add_argument('--slaps2s_t', type=int, default=20, help="Evaluate classifier every t epochs in SLAPS2s")
 
+    parser.add_argument('--perturbated_rho', type=int, default=0, help="Rho for figure 5 to produce noisy input")
+
     args = parser.parse_args()
 
     args.use_gpu = True if torch.cuda.is_available() and args.use_gpu else False
