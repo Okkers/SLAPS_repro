@@ -22,6 +22,9 @@ def add_edges(A, class_predictions, confidence, conf_threshold, max_add):
 
     total_added = 0
 
+    if max_add <= 0:
+        return A_add, total_added
+
     # We only consider nodes where confidence of being in class C is >= conf_threshold
     confident_nodes = torch.where(confidence >= conf_threshold)[0].tolist()
 
@@ -54,6 +57,9 @@ def remove_edges(A, class_predictions, confidence, conf_threshold, max_remove):
     A_remove = A.clone()
 
     total_removed = 0
+
+    if max_remove <= 0:
+        return A_remove, total_removed
 
     # We only consider nodes where confidence of being in class C is >= conf_threshold
     confident_nodes = torch.where(confidence >= conf_threshold)[0].tolist()

@@ -131,9 +131,11 @@ def load_ogbn_arxiv_data():
 
     split_idx = data.get_idx_split()
 
-    mask_train = create_mask(split_idx["train"], data.x.shape[0])
-    mask_val = create_mask(split_idx["valid"], data.x.shape[0])
-    mask_test = create_mask(split_idx["test"], data.x.shape[0])
+    num_nodes = dataset.x.shape[0]
+
+    mask_train = create_mask(split_idx["train"], num_nodes)
+    mask_val = create_mask(split_idx["valid"], num_nodes)
+    mask_test = create_mask(split_idx["test"], num_nodes)
     
     features = torch.FloatTensor(features)
     labels = torch.LongTensor(labels).squeeze() # shape (num_nodes,)
@@ -236,9 +238,6 @@ def load_sklearn_data(dataset_name):
         train_mask, val_mask, test_mask = mask_sklearn_data(features, labels, train_size=50, val_size=100, seed=42)
     elif dataset_name == "20news":
         train_mask, val_mask, test_mask = mask_sklearn_data(features, labels, train_size=100, val_size=200, seed=42)
-
-    # if sp.issparse(features):
-    #     features = features.toarray()
 
     features = torch.FloatTensor(features)
     labels = torch.LongTensor(labels)
