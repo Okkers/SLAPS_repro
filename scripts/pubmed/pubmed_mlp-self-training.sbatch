@@ -68,8 +68,6 @@ ls -lh "${WORK_DIR}/data/ind.pubmed."* || {
     exit 1
 }
 
-# IMPORTANT:
-# Stay in WORK_DIR so relative paths like data/ind.pubmed.x work correctly.
 cd "${WORK_DIR}"
 
 apptainer exec --nv \
