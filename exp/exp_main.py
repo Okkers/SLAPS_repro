@@ -431,11 +431,6 @@ class Exp_Main(Exp_Basic):
 
         return test_acc
     
-    def predict(self, setting):
-        ### IMPLEMENT BATCH PREDICTION
-
-        return 
-    
     def bugfix(self):
         ### BUGFIXING NOISE FUNCTION FOR NOW 
         test_x = torch.ones((5,5))

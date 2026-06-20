@@ -60,7 +60,7 @@ def main():
     
     ### SELF-TRAINING
     parser.add_argument('--self_training', action='store_true', help="Include self-training step or not.")
-    parser.add_argument('--self_training_zeta', type=int, default=50)
+    parser.add_argument('--self_training_zeta', type=int, default=50, help="Amount of extra training labels added.")
 
     ### ADA EDGE
     parser.add_argument('--ada_edge', action='store_true', help="Run ada edge.")
