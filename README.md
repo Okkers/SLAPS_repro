@@ -2,6 +2,11 @@
 
 This is the code repository associated with our reproduction article [*Reproduction of "SLAPS: Self-Supervision Improves Structure Learning for Graph Neural Networks" (Fatemi et al.)*](https://hackmd.io/@l2ShhaYtT8K79WzeUtmyUQ/rJhZkOYffe). The repo contains the training code, dataset loaders, experiment scripts, and utilities for reproducing all figures, models and numbers in the article.
 
+
+<img width="857" height="317" alt="Screenshot 2026-06-16 023947(1)" src="https://github.com/user-attachments/assets/660334b1-2184-4027-acc2-5bb22aec1a97" />
+
+(*Figure from the original paper, of the SLAPS architecture*)
+
 ## Setup
 
 Create a virtual environment and install the Python dependencies:
@@ -89,19 +94,8 @@ python -u main.py \
   --is_discrete \
   --weight_decay_c 0.0005 \
   --hidden_dim_dae 512
-```
+```<img width="857" height="317" alt="Screenshot 2026-06-16 023947(1)" src="https://github.com/user-attachments/assets/a2ec165f-f469-47a6-961a-771828a3cd9d" />
 
-Examples for the main presets are available in:
-
-- `scripts/cora/`
-- `scripts/citeseer/`
-- `scripts/pubmed/`
-- `scripts/ogbn-arxiv/`
-- `scripts/wine/`
-- `scripts/cancer/`
-- `scripts/digits/`
-- `scripts/20_news/`
-- `scripts/mnist/`
 
 ## Figures in `utils/`
 
