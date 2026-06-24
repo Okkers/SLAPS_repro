@@ -94,8 +94,7 @@ python -u main.py \
   --is_discrete \
   --weight_decay_c 0.0005 \
   --hidden_dim_dae 512
-```<img width="857" height="317" alt="Screenshot 2026-06-16 023947(1)" src="https://github.com/user-attachments/assets/a2ec165f-f469-47a6-961a-771828a3cd9d" />
-
+```
 
 ## Figures in `utils/`
 
