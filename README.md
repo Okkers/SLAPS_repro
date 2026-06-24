@@ -127,6 +127,6 @@ python utils/plot_homophily_odds.py \
 
 This writes the figure you specify with `--output`.
 
-## Branch Caveat
+## Branches
 
 Two additional implementation branches are kept in this repository, `feature/ada-edge-self-training` and `feature/fig_3,4,5_reproduction`. They differ in a few training and data-processing steps so the code can match different experiment configurations. If you are reproducing a specific result, make sure you are on the branch whose implementation matches that configuration.
